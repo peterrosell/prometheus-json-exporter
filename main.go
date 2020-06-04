@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -96,8 +97,11 @@ func probeHandler(w http.ResponseWriter, r *http.Request) {
 
 	target := params.Get("target")
 	if target == "" {
-		http.Error(w, "Target parameter is missing", http.StatusBadRequest)
-		return
+		target = os.Getenv("TARGET")
+		if target == "" {
+			http.Error(w, "Target parameter is missing", http.StatusBadRequest)
+			return
+		}
 	}
 
 	prefix := params.Get("prefix")
