@@ -1,12 +1,15 @@
 .PHONY: build pull push
 
-IMAGE_NAME = shiroyagicorp/prometheus-json-exporter
+VERSION ?= latest
+IMAGE_NAME ?= peterrosell/prometheus-json-exporter
+
+release: pull build push
 
 build:
-	docker build -t $(IMAGE_NAME) .
+	docker build -t $(IMAGE_NAME):$(VERSION) .
 
 pull:
-	docker pull $(IMAGE_NAME)
+	docker pull $(IMAGE_NAME):latest
 
 push:
-	docker push $(IMAGE_NAME)
+	docker push $(IMAGE_NAME):$(VERSION)
